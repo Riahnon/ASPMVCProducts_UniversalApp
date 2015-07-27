@@ -40,7 +40,7 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="local"/>
             <Setter Property="IsHoldingEnabled" Value="True"/>
-            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Margin" Value="1"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -94,8 +94,8 @@
             <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" HorizontalAlignment="Left" Text="Server URL" VerticalAlignment="Center"/>
             <TextBox Name="mServerURLTxtBox" Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding ElementName=mThis, Path=APIClient.ServerURL}" />
             <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Name="mLoginBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Click="mLoginBtn_Click">Login</Button>
-                <Button Name="mRegisterBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Click="mRegisterBtn_Click">Register</Button>
+                <Button Name="mLoginBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Tapped="mLoginBtn_Tapped">Login</Button>
+                <Button Name="mRegisterBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Tapped="mRegisterBtn_Tapped">Register</Button>
             </StackPanel>
             <local:LoadingCircle x:Name="mCircleIsBusy" Grid.Row="5" Grid.ColumnSpan="2" Margin="3"  Width="55" Height="55" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
          
@@ -121,7 +121,7 @@
                     <Run Text="Logged in as "/>
                     <Run Text="{Binding ElementName=mThis, Path=APIClient.LoggedInUser.Name}"/>
                 </TextBlock>
-                <Button Name="mLogoutBtn"  Margin="3" VerticalAlignment="Center" Click="mLogoutBtn_Click" Content="Logout"/>
+                <Button Name="mLogoutBtn"  Margin="3" VerticalAlignment="Center" Tapped="mLogoutBtn_Tapped" Content="Logout"/>
             </StackPanel>
             <Line Grid.ColumnSpan="3" Grid.Row="1" Margin="3" X1="0" Y1="0" X2="{Binding ElementName=mGridLoggedIn, Path=ActualWidth}" Y2="0" Stroke="White" StrokeThickness="2" />
             <Grid Name="mGridProductLists" Grid.Row="2" Grid.Column="0">
@@ -165,7 +165,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" Name="mProductListNameTxtBox" Margin="3" VerticalAlignment="Center" KeyDown="mProductListNameTxtBox_KeyDown" />
-                    <Button Name="mCreateProductListBtn" Grid.Column="1" Margin="3" VerticalAlignment="Bottom" Click="mAddProductListBtn_Click">Add</Button>
+                    <Button Name="mCreateProductListBtn" Grid.Column="1" Margin="3" VerticalAlignment="Bottom" Tapped="mAddProductListBtn_Tapped">Add</Button>
                 </Grid>
             </Grid>
             <Line Grid.Row="2" Grid.Column="1" Margin="3" X1="0" Y1="0" X2="0" Y2="{Binding ElementName=mGridProductLists, Path=ActualHeight}" Stroke="White" StrokeThickness="1" />
@@ -177,40 +177,46 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" FontSize="37" HorizontalAlignment="Center">Products</TextBlock>
-                <ListView Grid.Row="1" Grid.Column="0" Margin="3" SelectionMode="Single" 
+                <ListView Grid.Row="1" Grid.Column="0" Margin="3" SelectionMode="Single" CanDragItems="False" CanReorderItems="False" 
+                          IsDoubleTapEnabled="False"
+                          IsHoldingEnabled="False" 
+                          IsItemClickEnabled="False"
+                          IsRightTapEnabled="False" 
                           IsEnabled="{Binding ElementName=mListViewProductLists, Path=SelectedItem, Converter={StaticResource mIsNotNullConverter}}"
                           ItemsSource="{Binding ElementName=mListViewProductLists, Path=SelectedItem.ProductEntries}" 
                           ItemContainerStyle="{StaticResource mListViewItemStyle}" >
                      <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" Orientation="Vertical" Margin="3" VerticalAlignment="Center">
-                                    <TextBlock Margin="3" VerticalAlignment="Center" FontSize="25" Text="{Binding Path=ProductName}"/>
-                                    <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="3">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Amount"/>
-                                        <TextBox Grid.Row="1" Grid.Column="1" Margin="3" Text="{Binding Path=Amount}"/>
-                                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Comments"/>
-                                        <TextBox Grid.Row="3" Margin="3" AcceptsReturn="True" Height="60" Text="{Binding Path=Comments}"/>
-                                    </Grid>
-                                </StackPanel>
-                                <Canvas Name="CanvasDeleteEntry" Grid.Column="1" Background="Transparent" Margin="3,3,25,3" VerticalAlignment="Center" Width="15" Height="15"
-                                                Tapped="ProductEntryDelete_Tapped" PointerEntered="CanvasDelete_PointerEntered" PointerPressed="CanvasDelete_PointerPressed" PointerReleased="CanvasDelete_PointerReleased"
-                                            PointerCaptureLost="CanvasDelete_PointerCaptureLost" PointerExited="CanvasDelete_PointerExited">
+                            <Border Background="#22FFFFFF" BorderThickness="0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Orientation="Vertical" Margin="3" VerticalAlignment="Center">
+                                        <TextBlock Margin="3" VerticalAlignment="Center" FontSize="25" Text="{Binding Path=ProductName}"/>
+                                        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="3">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Amount"/>
+                                            <TextBox Grid.Row="1" Grid.Column="1" Margin="3" Text="{Binding Path=Amount}"/>
+                                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Comments"/>
+                                            <TextBox Grid.Row="3" Margin="3" AcceptsReturn="True" Height="60" Text="{Binding Path=Comments}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                    <Canvas Name="CanvasDeleteEntry" Grid.Column="1" Background="Transparent" Margin="3,3,25,3" VerticalAlignment="Center" Width="15" Height="15"
+                                                    Tapped="ProductEntryDelete_Tapped" PointerEntered="CanvasDelete_PointerEntered" PointerPressed="CanvasDelete_PointerPressed" PointerReleased="CanvasDelete_PointerReleased"
+                                                PointerCaptureLost="CanvasDelete_PointerCaptureLost" PointerExited="CanvasDelete_PointerExited">
 
-                                    <Line X1="0" Y1="0" X2="15" Y2="15" StrokeThickness="5" Stroke="Red"/>
-                                    <Line X1="0" Y1="15" X2="15" Y2="0" StrokeThickness="5" Stroke="Red"/>
-                                </Canvas>
-                            </Grid>
+                                        <Line X1="0" Y1="0" X2="15" Y2="15" StrokeThickness="5" Stroke="Red"/>
+                                        <Line X1="0" Y1="15" X2="15" Y2="0" StrokeThickness="5" Stroke="Red"/>
+                                    </Canvas>
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -222,7 +228,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" Name="mProductEntryNameTxtBox" Margin="3" VerticalAlignment="Center" KeyDown="mProductEntryNameTxtBox_KeyDown"
                              IsEnabled="{Binding ElementName=mListViewProductLists, Path=SelectedItem, Converter={StaticResource mIsNotNullConverter}}"/>
-                    <Button Name="mCreateProductEntryBtn" Grid.Column="1" Margin="3" VerticalAlignment="Center" Click="mAddProductEntryBtn_Click"
+                    <Button Name="mCreateProductEntryBtn" Grid.Column="1" Margin="3" VerticalAlignment="Center" Tapped="mAddProductEntryBtn_Tapped"
                             IsEnabled="{Binding ElementName=mListViewProductLists, Path=SelectedItem, Converter={StaticResource mIsNotNullConverter}}">Add</Button>
                 </Grid>
             </Grid>

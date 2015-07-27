@@ -18,7 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)BoolToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterPipeLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InvertBoolConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ReferenceEqualsConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IsNullConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LoadingCircle.xaml.cs">
       <DependentUpon>LoadingCircle.xaml</DependentUpon>

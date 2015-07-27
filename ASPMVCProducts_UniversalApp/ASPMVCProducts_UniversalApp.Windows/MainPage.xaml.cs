@@ -49,29 +49,29 @@ namespace ASPMVCProducts_UniversalApp
             this.InitializeComponent();
         }
 
-        private async void mLoginBtn_Click(object sender, RoutedEventArgs e)
+        private async void mLoginBtn_Tapped(object sender, RoutedEventArgs e)
         {
             await _Login();
             await _QueryProductLists();
         }
 
-        private async void mRegisterBtn_Click(object sender, RoutedEventArgs e)
+        private async void mRegisterBtn_Tapped(object sender, RoutedEventArgs e)
         {
             await _Register();
             await _QueryProductLists();
         }
 
-        private async void mLogoutBtn_Click(object sender, RoutedEventArgs e)
+        private async void mLogoutBtn_Tapped(object sender, RoutedEventArgs e)
         {
             await _Logout();
         }
 
-        private async void mAddProductListBtn_Click(object sender, RoutedEventArgs e)
+        private async void mAddProductListBtn_Tapped(object sender, RoutedEventArgs e)
         {
             await _AddProductList();
         }
 
-        private async void mAddProductEntryBtn_Click(object sender, RoutedEventArgs e)
+        private async void mAddProductEntryBtn_Tapped(object sender, RoutedEventArgs e)
         {
             await _AddProductEntry();
         }

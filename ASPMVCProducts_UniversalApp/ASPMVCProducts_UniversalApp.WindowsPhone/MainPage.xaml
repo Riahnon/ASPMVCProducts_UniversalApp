@@ -30,7 +30,6 @@
                 <local:InvertBoolConverter/>
             </local:ConverterPipeLine.ValueConverters>
         </local:ConverterPipeLine>
-        <local:ReferenceEqualsConverter x:Key="mReferenceEqualsConverter"/>
         <local:InvertBoolConverter x:Key="mInvertBoolConverter" />
         <FontFamily x:Key="ContentControlThemeFontFamily">Segoe WP</FontFamily>
         <x:Double x:Key="ControlContentThemeFontSize">12</x:Double>
@@ -49,7 +48,7 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="Local"/>
             <Setter Property="IsHoldingEnabled" Value="False"/>
-            <Setter Property="Margin" Value="{ThemeResource ListViewItemMargin}"/>
+            <Setter Property="Margin" Value="1"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -65,19 +64,19 @@
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualStateGroup.Transitions>
                                         <VisualTransition From="Pressed" To="Normal">
-                                            <Storyboard>
+                                            <!--<Storyboard>
                                                 <PointerUpThemeAnimation Storyboard.TargetName="TiltContainer"/>
-                                            </Storyboard>
+                                            </Storyboard>-->
                                         </VisualTransition>
                                     </VisualStateGroup.Transitions>
                                     <VisualState x:Name="Normal">
-                                        <Storyboard>
+                                        <!--<Storyboard>
                                             <PointerDownThemeAnimation Storyboard.TargetName="TiltContainer"/>
-                                        </Storyboard>
+                                        </Storyboard>-->
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <Storyboard>
-                                            <PointerDownThemeAnimation Storyboard.TargetName="TiltContainer"/>
+                                            <!--<PointerDownThemeAnimation Storyboard.TargetName="TiltContainer"/>-->
                                             <ColorAnimation Duration="0" To="#2DFFFFFF" Storyboard.TargetProperty="(ListviewItem.Background).(SolidColorBrush.Color)" Storyboard.TargetName="ContentBorder" FillBehavior="HoldEnd" />
                                             <ColorAnimation Duration="0" To="#55FFFFFF" Storyboard.TargetProperty="(ListviewItem.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="ContentBorder" FillBehavior="HoldEnd" />
                                         </Storyboard>
@@ -281,8 +280,8 @@
             <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" HorizontalAlignment="Left" Text="Server URL" VerticalAlignment="Center"/>
             <TextBox Name="mServerURLTxtBox" Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding ElementName=mThis, Path=APIClient.ServerURL}" />
             <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Name="mLoginBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Click="mLoginBtn_Click">Login</Button>
-                <Button Name="mRegisterBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Click="mRegisterBtn_Click">Register</Button>
+                <Button Name="mLoginBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Tapped="mLoginBtn_Tapped">Login</Button>
+                <Button Name="mRegisterBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Tapped="mRegisterBtn_Tapped">Register</Button>
             </StackPanel>
             <local:LoadingCircle x:Name="mCircleIsBusy" Grid.Row="5" Grid.ColumnSpan="2" Margin="3"  Width="55" Height="55" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
         </Grid>
@@ -302,7 +301,7 @@
                         <Run Text="Logged in as "/>
                         <Run Text="{Binding ElementName=mThis, Path=APIClient.LoggedInUser.Name}"/>
                     </TextBlock>
-                    <Button Name="mLogoutBtn"  Margin="3" VerticalAlignment="Center" Click="mLogoutBtn_Click" Content="Logout"/>
+                    <Button Name="mLogoutBtn"  Margin="3" VerticalAlignment="Center" Tapped="mLogoutBtn_Tapped" Content="Logout"/>
                 </StackPanel>
                 <Line Grid.ColumnSpan="3" Grid.Row="1" Margin="3" X1="0" Y1="0" X2="{Binding ElementName=mGridProductLists, Path=ActualWidth}" Y2="0" Stroke="White" StrokeThickness="2" />
                 <Grid Name="mGridProductLists" Grid.Row="2" Visibility="{Binding ElementName=mListViewProductLists, Path=SelectedItem, Converter={StaticResource mVisibleWhenNullConverter}}">
@@ -347,7 +346,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBox Grid.Column="0" Name="mProductListNameTxtBox" Margin="3" VerticalAlignment="Center" KeyDown="mProductListNameTxtBox_KeyDown" TabIndex="99" />
-                        <Button Name="mCreateProductListBtn" Grid.Column="1" Margin="3" VerticalAlignment="Bottom" Click="mAddProductListBtn_Click">Add</Button>
+                        <Button Name="mCreateProductListBtn" Grid.Column="1" Margin="3" VerticalAlignment="Bottom" Tapped="mAddProductListBtn_Tapped">Add</Button>
                     </Grid>
                 </Grid>
                 <Grid Name="mGridProductEntries" Grid.Row="2"  Visibility="{Binding ElementName=mListViewProductLists, Path=SelectedItem, Converter={StaticResource mCollapsedWhenNullConverter}}">
@@ -389,7 +388,7 @@
                                                 <TextBox Grid.Row="3" Margin="3" AcceptsReturn="True" Height="60" Text="{Binding Path=Comments}"/>
                                             </Grid>
                                         </StackPanel>
-                                        <Canvas Name="CanvasDeleteEntry" Grid.Column="1" Background="Transparent" Margin="3,3,25,3" VerticalAlignment="Top" Width="25" Height="25"
+                                        <Canvas Name="CanvasDeleteEntry" Grid.Column="1" Background="Transparent" Margin="3,10,25,3" VerticalAlignment="Top" Width="25" Height="25"
                                                         Tapped="ProductEntryDelete_Tapped" PointerEntered="CanvasDeleteList_PointerEntered" PointerPressed="CanvasDelete_PointerPressed" PointerReleased="CanvasDelete_PointerReleased"
                                                 PointerCaptureLost="CanvasDelete_PointerCaptureLost" PointerExited="CanvasDelete_PointerExited">
 
@@ -408,7 +407,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBox Grid.Column="0" Name="mProductEntryNameTxtBox" Margin="3" VerticalAlignment="Center" KeyDown="mProductEntryNameTxtBox_KeyDown" TabIndex="99"/>
-                        <Button Name="mCreateProductEntryBtn" Grid.Column="1" Margin="3" VerticalAlignment="Center" Click="mAddProductEntryBtn_Click">Add</Button>
+                        <Button Name="mCreateProductEntryBtn" Grid.Column="1" Margin="3" VerticalAlignment="Center" Tapped="mAddProductEntryBtn_Tapped">Add</Button>
                     </Grid>
                 </Grid>
             </Grid>
