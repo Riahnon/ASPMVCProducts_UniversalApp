@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -49,6 +50,22 @@ namespace ASPMVCProducts_UniversalApp
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += _OnBackPressed;
+            /*PhoneApplicationService.Current.Activated += (o, e) =>
+            {
+                Debug.WriteLine("Activated");
+            };
+            PhoneApplicationService.Current.Closing += (o, e) =>
+            {
+                Debug.WriteLine("Closing");
+            };
+            PhoneApplicationService.Current.Deactivated += (o, e) =>
+            {
+                Debug.WriteLine("Deactivated");
+            };
+            PhoneApplicationService.Current.Launching += (o, e) =>
+            {
+                Debug.WriteLine("Launching");
+            };*/
         }
 
         private async void mLoginBtn_Tapped(object sender, RoutedEventArgs e)
@@ -257,7 +274,7 @@ namespace ASPMVCProducts_UniversalApp
             string lErrorMsg = null;
             try
             {
-                await APIClient.CreateProductList(new ProductListDTO(mProductListNameTxtBox.Text));
+                await APIClient.CreateProductList(new ProductListDTO() { Name = mProductListNameTxtBox.Text });
             }
             catch (Exception ex)
             {
@@ -354,13 +371,13 @@ namespace ASPMVCProducts_UniversalApp
                         if (APIClient.IsBusy)
                         {
                             this.IsEnabled = false;
-                            mCircleIsBusy.Visibility = Visibility.Visible;
+                            //mCircleIsBusy.Visibility = Visibility.Visible;
                             mStackPanelIsBusy.Visibility = Visibility.Visible;
                         }
                         else
                         {
                             this.IsEnabled = true;
-                            mCircleIsBusy.Visibility = Visibility.Collapsed;
+                            //mCircleIsBusy.Visibility = Visibility.Collapsed;
                             mStackPanelIsBusy.Visibility = Visibility.Collapsed;
                         }
                         break;

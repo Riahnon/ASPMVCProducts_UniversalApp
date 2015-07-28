@@ -283,7 +283,7 @@
                 <Button Name="mLoginBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Tapped="mLoginBtn_Tapped">Login</Button>
                 <Button Name="mRegisterBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Tapped="mRegisterBtn_Tapped">Register</Button>
             </StackPanel>
-            <local:LoadingCircle x:Name="mCircleIsBusy" Grid.Row="5" Grid.ColumnSpan="2" Margin="3"  Width="55" Height="55" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+            <!--<local:LoadingCircle x:Name="mCircleIsBusy" Grid.Row="5" Grid.ColumnSpan="2" Margin="3"  Width="55" Height="55" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>-->
         </Grid>
         <Grid Name="mGridLists" Visibility="{Binding ElementName=mThis, Path=APIClient.LoggedInUser, Converter={StaticResource mCollapsedWhenNullConverter}}">
             <Grid>
@@ -294,7 +294,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Name="mStackPanelIsBusy" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed">
                     <TextBlock Margin="3,3,5,3" VerticalAlignment="Center" Text="Busy..."/>
-                    <local:LoadingCircle  Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <!--<local:LoadingCircle  Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
                 </StackPanel>
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
                     <TextBlock Margin="3" VerticalAlignment="Center">

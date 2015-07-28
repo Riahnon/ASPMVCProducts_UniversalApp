@@ -271,7 +271,7 @@ namespace ASPMVCProducts_UniversalApp
             string lErrorMsg = null;
             try
             {
-                await APIClient.CreateProductList(new ProductListDTO(mProductListNameTxtBox.Text));
+                await APIClient.CreateProductList(new ProductListDTO() { Name = mProductListNameTxtBox.Text });
             }
             catch (Exception ex)
             {

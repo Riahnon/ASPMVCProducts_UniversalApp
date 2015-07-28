@@ -48,10 +48,9 @@ namespace ProductsAPI
         public string Name { get; set; }
         internal List<ProductEntryDTO> mProductEntries;
         public event PropertyChangedEventHandler PropertyChanged;
-        public ProductListDTO(string Name)
+        public ProductListDTO()
         {
             mProductEntries = new List<ProductEntryDTO>();
-            this.Name = Name;
         }
         public IEnumerable<ProductEntryDTO> ProductEntries
         {
@@ -411,9 +410,10 @@ namespace ProductsAPI
             case "ProductListCreated":
                 {
                     var lEventData = (JObject)aEventData;
-                    var lList = new ProductListDTO((string)lEventData["Name"])
+                    var lList = new ProductListDTO()
                     {
-                        Id = (int)lEventData["Id"]
+                        Id = (int)lEventData["Id"],
+                        Name = (string)lEventData["Name"] 
                     };
                     lock (this.ProductLists)
                         mProductLists.Add(lList);
