@@ -1,8 +1,8 @@
 ﻿<Page
-    x:Class="ASPMVCProducts_UniversalApp.MainPage"
+    x:Class="ASPMVCSignalRTest_Client.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:ASPMVCProducts_UniversalApp"
+    xmlns:local="using:ASPMVCSignalRTest_Client"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -88,11 +88,11 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center" Text="User name"/>
-            <TextBox Name="mUserNameTxtBox" Grid.Row="0" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="gcastro" />
+            <TextBox Name="mUserNameTxtBox" Grid.Row="0" Grid.Column="1" Margin="3" VerticalAlignment="Center" />
             <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Password"/>
-            <PasswordBox Name="mPwdBox" Grid.Row="1" Grid.Column="1" Margin="3" VerticalAlignment="Center" Password="gcastro"/>
+            <PasswordBox Name="mPwdBox" Grid.Row="1" Grid.Column="1" Margin="3" VerticalAlignment="Center"/>
             <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" HorizontalAlignment="Left" Text="Server URL" VerticalAlignment="Center"/>
-            <TextBox Name="mServerURLTxtBox" Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding ElementName=mThis, Path=APIClient.ServerURL}" />
+            <TextBox Name="mServerURLTxtBox" Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding ElementName=mThis, Path=APIClient.ServerURL, Mode=TwoWay}" />
             <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Name="mLoginBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Tapped="mLoginBtn_Tapped">Login</Button>
                 <Button Name="mRegisterBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Tapped="mRegisterBtn_Tapped">Register</Button>

@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
 
-namespace ASPMVCProducts_UniversalApp
+namespace ASPMVCSignalRTest_Client
 {
     /// <summary>
     /// Interaction logic for LoadingCircle.xaml

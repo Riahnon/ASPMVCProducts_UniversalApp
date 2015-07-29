@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="ASPMVCProducts_UniversalApp.App"
+    x:Class="ASPMVCSignalRTest_Client.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:ASPMVCProducts_UniversalApp">
+    xmlns:local="using:ASPMVCSignalRTest_Client">
     <Application.Resources>
     </Application.Resources>
 

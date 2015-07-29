@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -10,10 +9,10 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.Phone.UI.Input;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.Input;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -26,7 +25,7 @@ using Windows.Web.Http;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace ASPMVCProducts_UniversalApp
+namespace ASPMVCSignalRTest_Client
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -48,8 +47,6 @@ namespace ASPMVCProducts_UniversalApp
             this.APIClient = new ProductsAPIClientVM(this.Dispatcher, new ProductsAPIClient());
             this.APIClient.PropertyChanged += _OnAPIClientPropertyChanged;
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Required;
-            Windows.Phone.UI.Input.HardwareButtons.BackPressed += _OnBackPressed;
         }
 
         private async void mLoginBtn_Tapped(object sender, RoutedEventArgs e)
@@ -84,8 +81,7 @@ namespace ASPMVCProducts_UniversalApp
             var lSender = sender as FrameworkElement;
             if (lSender == null || !(lSender.DataContext is ProductListVM))
                 return;
-            if (Object.ReferenceEquals(mListViewProductLists.SelectedItem, lSender.DataContext))
-                mListViewProductLists.SelectedItem = null;
+
             var lProductList = ((ProductListVM)lSender.DataContext).Model;
             await _DeleteProductList(lProductList);
             
@@ -94,7 +90,7 @@ namespace ASPMVCProducts_UniversalApp
         private async void ProductEntryDelete_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var lSender = sender as FrameworkElement;
-            if (lSender == null || !(lSender.DataContext is ProductEntryVM))
+            if (lSender == null || !(lSender.DataContext is ProductEntryVM) )
                 return;
 
             if (!(mListViewProductLists.SelectedItem is ProductListVM))
@@ -109,7 +105,7 @@ namespace ASPMVCProducts_UniversalApp
             {
                 e.Handled = true;
                 await _AddProductList();
-                mProductListNameTxtBox.Focus(FocusState.Keyboard);
+                mProductListNameTxtBox.Focus( FocusState.Keyboard );
             }
         }
 
@@ -126,6 +122,7 @@ namespace ASPMVCProducts_UniversalApp
         private void CanvasDelete_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             _MarkDeteCandidate(sender, e);
+
         }
 
         private void CanvasDelete_PointerPressed(object sender, PointerRoutedEventArgs e)
@@ -159,7 +156,6 @@ namespace ASPMVCProducts_UniversalApp
                 lBrush = new SolidColorBrush(Color.FromArgb(55, 255, 0, 0));
             while (lSender != null)
             {
-
                 if (lSender is Grid)
                 {
                     ((FrameworkElement)sender).CapturePointer(e.Pointer);
@@ -203,12 +199,12 @@ namespace ASPMVCProducts_UniversalApp
                     lErrorMsg = "The server rejected the connection. Please update your client to the last version";
                 else
                     lErrorMsg = "Error communicating with server";
-
+                    
             }
-
+               
             if (lErrorMsg != null)
                 await _ShowMessageBox_Ok(lErrorMsg);
-            
+
             return false;
         }
 
@@ -221,7 +217,7 @@ namespace ASPMVCProducts_UniversalApp
 
         private async Task<bool> _Register()
         {
-
+            
             if (String.IsNullOrEmpty(mUserNameTxtBox.Text) || string.IsNullOrEmpty(mPwdBox.Password))
                 return false;
             string lErrorMsg = null;
@@ -302,7 +298,7 @@ namespace ASPMVCProducts_UniversalApp
             catch (Exception ex)
             {
                 if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Conflict).ToString()))
-                    lErrorMsg = "Invalid name. The given product is already in the list";
+                    lErrorMsg ="Invalid name. The given product is already in the list";
                 else if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Forbidden).ToString()))
                     lErrorMsg = "The server rejected the connection. Please update your client to the last version";
                 else
@@ -372,16 +368,16 @@ namespace ASPMVCProducts_UniversalApp
                         }
                         break;
                     case "IsBusy":
-                        if (APIClient.IsBusy)
+                        if(APIClient.IsBusy)
                         {
                             this.IsEnabled = false;
-                            //mCircleIsBusy.Visibility = Visibility.Visible;
+                            mCircleIsBusy.Visibility = Visibility.Visible;
                             mStackPanelIsBusy.Visibility = Visibility.Visible;
                         }
                         else
                         {
                             this.IsEnabled = true;
-                            //mCircleIsBusy.Visibility = Visibility.Collapsed;
+                            mCircleIsBusy.Visibility = Visibility.Collapsed;
                             mStackPanelIsBusy.Visibility = Visibility.Collapsed;
                         }
                         break;
@@ -393,44 +389,11 @@ namespace ASPMVCProducts_UniversalApp
             }
         }
 
-        private async void _OnBackPressed ( object sender, BackPressedEventArgs e)
-        { 
-            //Not logged in
-            if(object.ReferenceEquals(APIClient.LoggedInUser,null))
-                return;
-
-            if (object.ReferenceEquals(mListViewProductLists.SelectedItem, null))
-            {
-                e.Handled = true;
-                await _Logout();
-            }
-            else 
-            {
-                e.Handled = true;
-                mListViewProductLists.SelectedItem = null;
-            }
-
-        }
         private async Task _ShowMessageBox_Ok(string aMessage)
         {
             var lMsg = new MessageDialog(aMessage);
             lMsg.Commands.Add(new UICommand("Ok"));
             await lMsg.ShowAsync();
-        }
-        /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            // TODO: Prepare page for display here.
-
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
         }
     }
 }

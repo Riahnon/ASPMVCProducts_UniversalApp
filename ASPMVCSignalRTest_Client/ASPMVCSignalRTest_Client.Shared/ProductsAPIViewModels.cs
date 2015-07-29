@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Windows.UI.Core;
 
-namespace ASPMVCProducts_UniversalApp
+namespace ASPMVCSignalRTest_Client
 {
     public class ProductListVM : ViewModelBase<ProductListDTO>
     {
@@ -70,6 +70,7 @@ namespace ASPMVCProducts_UniversalApp
         public string ServerURL
         {
             get { return Model.ServerURL; }
+            set { Model.ServerURL = value; }
         }
 
         public UserDTO LoggedInUser

@@ -2,7 +2,7 @@
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
   <Identity Name="04f5ddc2-b0ce-46f6-9c99-9b232fa2d169" Publisher="CN=Will" Version="1.0.0.0" />
   <Properties>
-    <DisplayName>ASPMVCProducts_UniversalApp.Windows</DisplayName>
+    <DisplayName>ASPMVCSignalRTest_Client.Windows</DisplayName>
     <PublisherDisplayName>Will</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -14,7 +14,7 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="ASPMVCProducts_UniversalApp.Windows.App">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="ASPMVCSignalRTest_Client.Windows.App">
       <m2:VisualElements DisplayName="ASPMVCSignalRTest_Client" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Windows store client applicacion for ASPMVCSignalRTest" ForegroundText="light" BackgroundColor="#464646">
         <m2:DefaultTile Square310x310Logo="Assets\Square310x310Logo.png" Wide310x150Logo="Assets\Wide310x150Logo.png" Square70x70Logo="Assets\Square70x70Logo.png">
         </m2:DefaultTile>

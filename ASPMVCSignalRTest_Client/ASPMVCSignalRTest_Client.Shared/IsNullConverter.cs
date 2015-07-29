@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
 
-namespace ASPMVCProducts_UniversalApp
+namespace ASPMVCSignalRTest_Client
 {
     public class IsNullConverter : IValueConverter
     {

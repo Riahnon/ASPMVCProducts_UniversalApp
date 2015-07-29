@@ -3,7 +3,7 @@
   <Identity Name="90892471-246e-4c22-b1b2-8e015d5e6447" Publisher="CN=Will" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="90892471-246e-4c22-b1b2-8e015d5e6447" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>ASPMVCProducts_UniversalApp.WindowsPhone</DisplayName>
+    <DisplayName>ASPMVCSignalRTest_Client.WindowsPhone</DisplayName>
     <PublisherDisplayName>Will</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -15,7 +15,7 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="ASPMVCProducts_UniversalApp.WindowsPhone.App">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="ASPMVCSignalRTest_Client.WindowsPhone.App">
       <m3:VisualElements DisplayName="ASPMVCSignalRTest_Client" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="Windows phone client applicacion for ASPMVCSignalRTest" ForegroundText="light" BackgroundColor="transparent">
         <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png">
           <m3:ShowNameOnTiles>

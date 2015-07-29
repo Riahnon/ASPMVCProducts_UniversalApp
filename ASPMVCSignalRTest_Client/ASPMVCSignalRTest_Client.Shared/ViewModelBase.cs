@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using Windows.UI.Core;
 
-namespace ASPMVCProducts_UniversalApp
+namespace ASPMVCSignalRTest_Client
 {
     public class ViewModelBase<T> : INotifyPropertyChanged where T:INotifyPropertyChanged
     {

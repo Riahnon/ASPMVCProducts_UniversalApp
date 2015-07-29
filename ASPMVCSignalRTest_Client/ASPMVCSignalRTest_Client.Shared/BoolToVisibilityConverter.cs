@@ -3,18 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-namespace ASPMVCProducts_UniversalApp
+namespace ASPMVCSignalRTest_Client
 {
-    public class InvertBoolConverter : IValueConverter
+    public class BoolToVisibilityConverter : IValueConverter
     {
+
+        public BoolToVisibilityConverter()
+        {
+
+        }
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is bool)
-                return !((bool)value);
-
-            throw new ArgumentException("Provided value must be bool");
+            {
+                var lValue = (bool)value;
+                return lValue ? Visibility.Visible : Visibility.Collapsed;
+            }
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
