@@ -283,7 +283,7 @@
                 <Button Name="mLoginBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Tapped="mLoginBtn_Tapped">Login</Button>
                 <Button Name="mRegisterBtn"  Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Tapped="mRegisterBtn_Tapped">Register</Button>
             </StackPanel>
-            <!--<local:LoadingCircle x:Name="mCircleIsBusy" Grid.Row="5" Grid.ColumnSpan="2" Margin="3"  Width="55" Height="55" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>-->
+            <local:LoadingCircle x:Name="mCircleIsBusy" Grid.Row="5" Grid.ColumnSpan="2" Margin="3"  Width="55" Height="55" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
         </Grid>
         <Grid Name="mGridLists" Visibility="{Binding ElementName=mThis, Path=APIClient.LoggedInUser, Converter={StaticResource mCollapsedWhenNullConverter}}">
             <Grid>
@@ -292,11 +292,11 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <StackPanel Name="mStackPanelIsBusy" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed">
+                <StackPanel Name="mStackPanelIsBusy" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed">
                     <TextBlock Margin="3,3,5,3" VerticalAlignment="Center" Text="Busy..."/>
-                    <!--<local:LoadingCircle  Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
+                    <local:LoadingCircle  Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
                     <TextBlock Margin="3" VerticalAlignment="Center">
                         <Run Text="Logged in as "/>
                         <Run Text="{Binding ElementName=mThis, Path=APIClient.LoggedInUser.Name}"/>
@@ -329,7 +329,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Margin="3" FontSize="25" FontStyle="Italic" Text="{Binding Path=Name}" VerticalAlignment="Center"/>
                                     <Canvas Name="CanvasDeleteList" Grid.Column="1" Background="Transparent" Margin="3,3,25,3" VerticalAlignment="Center" Width="25" Height="25"
-                                                   Tapped="ProductListDelete_Tapped" PointerEntered="CanvasDeleteList_PointerEntered" PointerPressed="CanvasDelete_PointerPressed" PointerReleased="CanvasDelete_PointerReleased"
+                                                   Tapped="ProductListDelete_Tapped" PointerPressed="CanvasDelete_PointerPressed" PointerReleased="CanvasDelete_PointerReleased"
                                                     PointerCaptureLost="CanvasDelete_PointerCaptureLost" PointerExited="CanvasDelete_PointerExited">
                                         <Line X1="0" Y1="0" X2="25" Y2="25" StrokeThickness="5" Stroke="Red"/>
                                         <Line X1="0" Y1="25" X2="25" Y2="0" StrokeThickness="5" Stroke="Red"/>
@@ -383,13 +383,13 @@
                                                     <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
                                                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Amount"/>
-                                                <TextBox Grid.Row="1" Grid.Column="1" Margin="3" Text="{Binding Path=Amount}"/>
+                                                <TextBox Grid.Row="1" Grid.Column="1" Margin="3" Text="{Binding Path=Amount, Mode=TwoWay}"/>
                                                 <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Comments"/>
-                                                <TextBox Grid.Row="3" Margin="3" AcceptsReturn="True" Height="60" Text="{Binding Path=Comments}"/>
+                                                <TextBox Grid.Row="3" Margin="3" AcceptsReturn="True" Height="60" Text="{Binding Path=Comments, Mode=TwoWay}"/>
                                             </Grid>
                                         </StackPanel>
                                         <Canvas Name="CanvasDeleteEntry" Grid.Column="1" Background="Transparent" Margin="3,10,25,3" VerticalAlignment="Top" Width="25" Height="25"
-                                                        Tapped="ProductEntryDelete_Tapped" PointerEntered="CanvasDeleteList_PointerEntered" PointerPressed="CanvasDelete_PointerPressed" PointerReleased="CanvasDelete_PointerReleased"
+                                                        Tapped="ProductEntryDelete_Tapped" PointerPressed="CanvasDelete_PointerPressed" PointerReleased="CanvasDelete_PointerReleased"
                                                 PointerCaptureLost="CanvasDelete_PointerCaptureLost" PointerExited="CanvasDelete_PointerExited">
 
                                             <Line X1="0" Y1="0" X2="25" Y2="25" StrokeThickness="5" Stroke="Red"/>

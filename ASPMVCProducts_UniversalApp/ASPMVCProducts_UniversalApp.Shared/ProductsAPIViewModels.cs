@@ -87,12 +87,12 @@ namespace ASPMVCProducts_UniversalApp
             get { return Model.IsBusy; }
         }
 
-        public async Task RegisterUser(RegisterUserDTO aUser)
+        public async Task RegisterUser(LoginRegisterDTO aUser)
         {
             await Model.RegisterUser(aUser);
         }
 
-        public async Task Login(RegisterUserDTO aUser)
+        public async Task Login(LoginRegisterDTO aUser)
         {
             await Model.Login(aUser);
         }

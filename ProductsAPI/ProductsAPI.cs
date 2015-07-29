@@ -24,7 +24,7 @@ namespace ProductsAPI
         public string Name { get; set; }
     }
 
-    public class RegisterUserDTO
+    public class LoginRegisterDTO
     {
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -143,27 +143,6 @@ namespace ProductsAPI
 
     public partial class ProductsAPIClient : INotifyPropertyChanged
     {
-        const string FormsAuthentication_FormsCookieName = ".ASPXAUTH";
-        const string WEB_API_PREFIX = "api";
-        const string DEFAULT_URL_SERVER = /*"http://dell-xps-12:51902"*/ /*"http://localhost:51902"*/ "http://aspmvcsignalrtest.azurewebsites.net/";
-
-        const string URL_ACCOUNTS = WEB_API_PREFIX + "/account";
-        const string URL_REGISTER_USER = URL_ACCOUNTS + "/register";
-        const string URL_LOGIN_USER = URL_ACCOUNTS + "/login";
-        const string URL_LOGOUT_USER = URL_ACCOUNTS + "/logout";
-
-
-        const string URL_PRODUCT_LISTS = WEB_API_PREFIX + "/productlists";
-        const string URL_CREATE_PRODUCT_LIST = URL_PRODUCT_LISTS + "/create";
-        const string URL_DELETE_PRODUCT_LIST = URL_PRODUCT_LISTS + "/delete/{0}";
-
-        const string URL_PRODUCT_ENTRIES = WEB_API_PREFIX + "/productlists/{0}";
-        const string URL_CREATE_PRODUCT_ENTRY = URL_PRODUCT_ENTRIES + "/create";
-        const string URL_EDIT_PRODUCT_ENTRY = URL_PRODUCT_ENTRIES + "/edit/{1}";
-        const string URL_DELETE_PRODUCT_ENTRY = URL_PRODUCT_ENTRIES + "/delete/{1}";
-
-        const string URL_SIGNALR_HUB = "/signalr";
-
         private IHubProxy mHubProxy;
         private HubConnection mHubConnection;
 
@@ -174,9 +153,10 @@ namespace ProductsAPI
         {
             mJSONRequester = new HttpJSONRequester();
             mProductLists = new List<ProductListDTO>();
+            mRequestHeaders.Add(APIConstants.API_VERSION_HEADER, APIConstants.API_VERSION_VALUE);
         }
 
-        string mServerURL = DEFAULT_URL_SERVER;
+        string mServerURL = APIConstants.DEFAULT_URL_SERVER;
         public string ServerURL
         {
             get { return mServerURL; }
@@ -220,14 +200,14 @@ namespace ProductsAPI
         }
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public async Task RegisterUser(RegisterUserDTO aUser)
+        public async Task RegisterUser(LoginRegisterDTO aUser)
         {
-            await _LoginOrRegister(aUser, URL_REGISTER_USER);
+            await _LoginOrRegister(aUser, APIConstants.URL_REGISTER_USER);
         }
 
-        public async Task Login(RegisterUserDTO aUser)
+        public async Task Login(LoginRegisterDTO aUser)
         {
-            await _LoginOrRegister(aUser, URL_LOGIN_USER);
+            await _LoginOrRegister(aUser, APIConstants.URL_LOGIN_USER);
         }
 
         public async Task Logout()
@@ -239,18 +219,13 @@ namespace ProductsAPI
                     LoggedInUser = null;
                     if (mHubConnection != null)
                     {
-                        //mHubConnection.Closed -= _OnSignalRConnectionClosed;
-                        mHubConnection.ConnectionSlow -= _OnSignalRConnectionSlow;
-                        mHubConnection.Error -= _OnSignalRError;
-                        mHubConnection.Reconnected -= _OnSignalRReconnected;
-                        mHubConnection.Reconnecting -= _OnSignalRReconnecting;
                         mHubConnection.StateChanged -= _OnSignalRConnectionStateChanged;
                         mHubConnection.Stop();
                     }
                     try
                     {
-                        var lResponse = await mJSONRequester.Post(this.ServerURL, URL_LOGOUT_USER, mRequestHeaders);
-                        mRequestHeaders.Remove(FormsAuthentication_FormsCookieName);
+                        var lResponse = await mJSONRequester.Post(this.ServerURL, APIConstants.URL_LOGOUT_USER, mRequestHeaders);
+                        mRequestHeaders.Remove(APIConstants.FormsAuthentication_FormsCookieName);
                     }
                     catch
                     {
@@ -268,9 +243,9 @@ namespace ProductsAPI
         {
             using (this.SetBusy())
             {
-                List<ProductListDTO> lProductLists = await mJSONRequester.Get<List<ProductListDTO>>(this.ServerURL, URL_PRODUCT_LISTS, mRequestHeaders);
-                if (lProductLists == null)
-                    return;
+                var lResponse = await mJSONRequester.Get(this.ServerURL, APIConstants.URL_PRODUCT_LISTS, mRequestHeaders);
+                lResponse.EnsureSuccessStatusCode();
+                List<ProductListDTO> lProductLists = await lResponse.Content.ReadAsAsync<List<ProductListDTO>>();
 
                 lock (mProductLists)
                 {
@@ -290,7 +265,7 @@ namespace ProductsAPI
         {
             using (this.SetBusy())
             {
-                var lResponse = await mJSONRequester.Post<ProductListDTO>(this.ServerURL, URL_CREATE_PRODUCT_LIST, aProductList, mRequestHeaders);
+                var lResponse = await mJSONRequester.Post<ProductListDTO>(this.ServerURL, APIConstants.URL_CREATE_PRODUCT_LIST, aProductList, mRequestHeaders);
                 lResponse.EnsureSuccessStatusCode();
             }
         }
@@ -299,7 +274,7 @@ namespace ProductsAPI
         {
             using (this.SetBusy())
             {
-                var lResponse = await mJSONRequester.Delete(this.ServerURL, string.Format(URL_DELETE_PRODUCT_LIST, aProductList.Id), mRequestHeaders);
+                var lResponse = await mJSONRequester.Delete(this.ServerURL, string.Format(APIConstants.URL_DELETE_PRODUCT_LIST, aProductList.Id), mRequestHeaders);
                 lResponse.EnsureSuccessStatusCode();
             }
         }
@@ -308,7 +283,10 @@ namespace ProductsAPI
         {
             using (this.SetBusy())
             {
-                List<ProductEntryDTO> lProductEntries = await mJSONRequester.Get<List<ProductEntryDTO>>(this.ServerURL, string.Format(URL_PRODUCT_ENTRIES, aList.Id), mRequestHeaders);
+                var lResponse = await mJSONRequester.Get(this.ServerURL, string.Format(APIConstants.URL_PRODUCT_ENTRIES, aList.Id), mRequestHeaders);
+                lResponse.EnsureSuccessStatusCode();
+                List<ProductEntryDTO> lProductEntries = await lResponse.Content.ReadAsAsync<List<ProductEntryDTO>>();
+
                 //Unsuscribe from previous event listeners
                 foreach (var lProductEntry in aList.ProductEntries)
                 {
@@ -336,7 +314,7 @@ namespace ProductsAPI
         {
             using (this.SetBusy())
             {
-                var lResponse = await mJSONRequester.Post<ProductEntryDTO>(this.ServerURL, string.Format(URL_CREATE_PRODUCT_ENTRY, aList.Id), aProductEntry, mRequestHeaders);
+                var lResponse = await mJSONRequester.Post<ProductEntryDTO>(this.ServerURL, string.Format(APIConstants.URL_CREATE_PRODUCT_ENTRY, aList.Id), aProductEntry, mRequestHeaders);
                 lResponse.EnsureSuccessStatusCode();
             }
         }
@@ -345,7 +323,7 @@ namespace ProductsAPI
         {
             using (this.SetBusy())
             {
-                var lResponse = await mJSONRequester.Delete(this.ServerURL, string.Format(URL_DELETE_PRODUCT_ENTRY, aList.Id, aProductEntry.Id), mRequestHeaders);
+                var lResponse = await mJSONRequester.Delete(this.ServerURL, string.Format(APIConstants.URL_DELETE_PRODUCT_ENTRY, aList.Id, aProductEntry.Id), mRequestHeaders);
                 lResponse.EnsureSuccessStatusCode();
             }
         }
@@ -357,7 +335,7 @@ namespace ProductsAPI
             {
             case "Amount":
             case "Comments":
-                await mJSONRequester.Put<ProductEntryDTO, ProductEntryDTO>(this.ServerURL, string.Format(URL_EDIT_PRODUCT_ENTRY, lProductEntry.OwnerList.Id, lProductEntry.Id), lProductEntry, mRequestHeaders);
+                await mJSONRequester.Put<ProductEntryDTO, ProductEntryDTO>(this.ServerURL, string.Format(APIConstants.URL_EDIT_PRODUCT_ENTRY, lProductEntry.OwnerList.Id, lProductEntry.Id), lProductEntry, mRequestHeaders);
                 break;
             }
         }
@@ -371,19 +349,19 @@ namespace ProductsAPI
             }
         }
 
-        private async Task _LoginOrRegister(RegisterUserDTO aUser, string aURL)
+        private async Task _LoginOrRegister(LoginRegisterDTO aUser, string aURL)
         {
             using (this.SetBusy())
             {
-                var lResponse = await mJSONRequester.Post<RegisterUserDTO>(this.ServerURL, aURL, aUser, mRequestHeaders);
+                var lResponse = await mJSONRequester.Post<LoginRegisterDTO>(this.ServerURL, aURL, aUser, mRequestHeaders);
                 lResponse.EnsureSuccessStatusCode();
 
                 var lUser = await lResponse.Content.ReadAsAsync<UserDTO>();
                 var lCookies = mJSONRequester.Cookies.GetCookies(new Uri(this.ServerURL));
-                var lAuthCookie = lCookies.Cast<Cookie>().FirstOrDefault(aCookie => aCookie != null && aCookie.Name == FormsAuthentication_FormsCookieName);
+                var lAuthCookie = lCookies.Cast<Cookie>().FirstOrDefault(aCookie => aCookie != null && aCookie.Name == APIConstants.FormsAuthentication_FormsCookieName);
                 if (lAuthCookie != null)
                 {
-                    this.mHubConnection = new HubConnection(this.ServerURL + URL_SIGNALR_HUB);
+                    this.mHubConnection = new HubConnection(this.ServerURL + APIConstants.URL_SIGNALR_HUB);
                     this.mHubConnection.CookieContainer = new CookieContainer();
                     this.mHubConnection.CookieContainer.Add(lResponse.RequestMessage.RequestUri, lAuthCookie);
                     mHubProxy = mHubConnection.CreateHubProxy("ProductsHub");
@@ -391,12 +369,6 @@ namespace ProductsAPI
                     await mHubConnection.Start(new LongPollingTransport());
                     mRequestHeaders[lAuthCookie.Name] = lAuthCookie.Value;
                     LoggedInUser = lUser;
-                    //mHubConnection.Closed += _OnSignalRConnectionClosed;
-
-                    mHubConnection.ConnectionSlow += _OnSignalRConnectionSlow;
-                    mHubConnection.Error += _OnSignalRError;
-                    mHubConnection.Reconnected += _OnSignalRReconnected;
-                    mHubConnection.Reconnecting += _OnSignalRReconnecting;
                     mHubConnection.StateChanged += _OnSignalRConnectionStateChanged;
                     _NotifyPropertyChanged("LoggedInUser");
                 }
@@ -490,26 +462,6 @@ namespace ProductsAPI
                 break;
             }
         }
-
-        private async void _OnSignalRConnectionClosed()
-        {
-            await this.Logout();
-        }
-
-        private async void _OnSignalRConnectionSlow()
-        { 
-
-        }
-        private async void _OnSignalRError ( Exception aException )
-        { 
-        }
-        private async void _OnSignalRReconnected()
-        { 
-        }
-        private async void _OnSignalRReconnecting()
-        {
-        }
-
 
         private async void _OnSignalRConnectionStateChanged(StateChange aStateChange)
         {

@@ -50,34 +50,34 @@ namespace ASPMVCProducts_UniversalApp
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += _OnBackPressed;
-            /*PhoneApplicationService.Current.Activated += (o, e) =>
+            Window.Current.VisibilityChanged += (o, e) =>
+            {
+                Debug.WriteLine("VisibilityChanged");
+            };
+            Window.Current.Activated += (o, e) =>
             {
                 Debug.WriteLine("Activated");
             };
-            PhoneApplicationService.Current.Closing += (o, e) =>
+            Window.Current.Closed += (o, e) =>
             {
-                Debug.WriteLine("Closing");
+                Debug.WriteLine("Closed");
             };
-            PhoneApplicationService.Current.Deactivated += (o, e) =>
+            Window.Current.SizeChanged += (o, e) =>
             {
-                Debug.WriteLine("Deactivated");
+                Debug.WriteLine("SizeChanged");
             };
-            PhoneApplicationService.Current.Launching += (o, e) =>
-            {
-                Debug.WriteLine("Launching");
-            };*/
         }
 
         private async void mLoginBtn_Tapped(object sender, RoutedEventArgs e)
         {
-            await _Login();
-            await _QueryProductLists();
+            if(await _Login())
+                await _QueryProductLists();
         }
 
         private async void mRegisterBtn_Tapped(object sender, RoutedEventArgs e)
         {
-            await _Register();
-            await _QueryProductLists();
+            if(await _Register())
+                await _QueryProductLists();
         }
 
         private async void mLogoutBtn_Tapped(object sender, RoutedEventArgs e)
@@ -159,7 +159,6 @@ namespace ASPMVCProducts_UniversalApp
             _UnmarkDeteCandidate(sender, e);
         }
 
-
         private void CanvasDelete_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             _UnmarkDeteCandidate(sender, e);
@@ -202,34 +201,22 @@ namespace ASPMVCProducts_UniversalApp
             }
         }
 
-        private async Task _QueryProductLists()
-        {
-            string lErrorMsg = null;
-            try
-            {
-                await this.APIClient.QueryProductLists();
-            }
-            catch
-            {
-                lErrorMsg = "Error retrieving product lists from server";
-            }
-            if (lErrorMsg != null)
-                await _ShowMessageBox_Ok(lErrorMsg);
-        }
-
-        private async Task _Login()
+        private async Task<bool> _Login()
         {
             string lErrorMsg = null;
             try
             {
                 if (String.IsNullOrEmpty(mUserNameTxtBox.Text) || string.IsNullOrEmpty(mPwdBox.Password))
-                    return;
-                await APIClient.Login(new RegisterUserDTO() { UserName = mUserNameTxtBox.Text, Password = mPwdBox.Password });
+                    return false;
+                await APIClient.Login(new LoginRegisterDTO() { UserName = mUserNameTxtBox.Text, Password = mPwdBox.Password });
+                return true;
             }
             catch (Exception ex)
             {
                 if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Unauthorized).ToString()))
                     lErrorMsg = "Invalid username and/or password";
+                else if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Forbidden).ToString()))
+                    lErrorMsg = "The server rejected the connection. Please update your client to the last version";
                 else
                     lErrorMsg = "Error communicating with server";
 
@@ -237,6 +224,8 @@ namespace ASPMVCProducts_UniversalApp
 
             if (lErrorMsg != null)
                 await _ShowMessageBox_Ok(lErrorMsg);
+            
+            return false;
         }
 
         private async Task _Logout()
@@ -246,22 +235,45 @@ namespace ASPMVCProducts_UniversalApp
             mLoggingOut = false;
         }
 
-        private async Task _Register()
+        private async Task<bool> _Register()
         {
 
             if (String.IsNullOrEmpty(mUserNameTxtBox.Text) || string.IsNullOrEmpty(mPwdBox.Password))
-                return;
+                return false;
             string lErrorMsg = null;
             try
             {
-                await APIClient.RegisterUser(new RegisterUserDTO() { UserName = mUserNameTxtBox.Text, Password = mPwdBox.Password });
+                await APIClient.RegisterUser(new LoginRegisterDTO() { UserName = mUserNameTxtBox.Text, Password = mPwdBox.Password });
+                return true;
             }
             catch (Exception ex)
             {
                 if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.NotModified).ToString()))
                     lErrorMsg = "Invalid username. There's already an user with the given username";
+                else if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Forbidden).ToString()))
+                    lErrorMsg = "The server rejected the connection. Please update your client to the last version";
                 else
                     lErrorMsg = "Error communicating with server";
+            }
+            if (lErrorMsg != null)
+                await _ShowMessageBox_Ok(lErrorMsg);
+
+            return false;
+        }
+
+        private async Task _QueryProductLists()
+        {
+            string lErrorMsg = null;
+            try
+            {
+                await this.APIClient.QueryProductLists();
+            }
+            catch (Exception ex)
+            {
+                if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Forbidden).ToString()))
+                    lErrorMsg = "The server rejected the connection. Please update your client to the last version";
+                else
+                    lErrorMsg = "Error retrieving product lists from server";
             }
             if (lErrorMsg != null)
                 await _ShowMessageBox_Ok(lErrorMsg);
@@ -280,6 +292,8 @@ namespace ASPMVCProducts_UniversalApp
             {
                 if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Conflict).ToString()))
                     lErrorMsg = "Invalid name. There's already a product list with the given name";
+                else if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Forbidden).ToString()))
+                    lErrorMsg = "The server rejected the connection. Please update your client to the last version";
                 else
                     lErrorMsg = "Error communicating with server";
             }
@@ -305,6 +319,8 @@ namespace ASPMVCProducts_UniversalApp
             {
                 if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Conflict).ToString()))
                     lErrorMsg = "Invalid name. The given product is already in the list";
+                else if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Forbidden).ToString()))
+                    lErrorMsg = "The server rejected the connection. Please update your client to the last version";
                 else
                     lErrorMsg = "Error communicating with server";
             }
@@ -326,6 +342,8 @@ namespace ASPMVCProducts_UniversalApp
                 {
                     //The given list was not found (probably already deleted in a race condition) Nothing is done
                 }
+                else if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Forbidden).ToString()))
+                    lErrorMsg = "The server rejected the connection. Please update your client to the last version";
                 else
                     lErrorMsg = "Error communicating with server";
             }
@@ -347,6 +365,8 @@ namespace ASPMVCProducts_UniversalApp
                 {
                     //The given product entry was not found (probably already deleted in a race condition) Nothing is done
                 }
+                else if (ex is HttpRequestException && ex.Message.Contains(((int)HttpStatusCode.Forbidden).ToString()))
+                    lErrorMsg = "The server rejected the connection. Please update your client to the last version";
                 else
                     lErrorMsg = "Error communicating with server";
             }
@@ -428,13 +448,5 @@ namespace ASPMVCProducts_UniversalApp
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
         }
-
-        private void CanvasDeleteList_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-
-        }
-
-        
-
     }
 }

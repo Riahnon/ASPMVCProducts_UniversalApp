@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
@@ -19,12 +20,23 @@ namespace ASPMVCProducts_UniversalApp
         public LoadingCircle()
         {
             InitializeComponent();
-            this.Loaded += (o, e) =>
+            Window.Current.VisibilityChanged += (o, e) =>
             {
-                for (int i = 0; i < 8; ++i)
+                if(e.Visible)
                 {
-                    var lSB = (Storyboard)this.Resources["Animation" + i];
-                    lSB.Begin();
+                    for (int i = 0; i < 8; ++i)
+                    {
+                        var lSB = (Storyboard)this.Resources["Animation" + i];
+                        lSB.Begin();
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 8; ++i)
+                    {
+                        var lSB = (Storyboard)this.Resources["Animation" + i];
+                        lSB.Stop();
+                    }
                 }
             };
         }
