@@ -50,22 +50,6 @@ namespace ASPMVCProducts_UniversalApp
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += _OnBackPressed;
-            Window.Current.VisibilityChanged += (o, e) =>
-            {
-                Debug.WriteLine("VisibilityChanged");
-            };
-            Window.Current.Activated += (o, e) =>
-            {
-                Debug.WriteLine("Activated");
-            };
-            Window.Current.Closed += (o, e) =>
-            {
-                Debug.WriteLine("Closed");
-            };
-            Window.Current.SizeChanged += (o, e) =>
-            {
-                Debug.WriteLine("SizeChanged");
-            };
         }
 
         private async void mLoginBtn_Tapped(object sender, RoutedEventArgs e)
