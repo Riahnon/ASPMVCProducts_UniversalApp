@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="04f5ddc2-b0ce-46f6-9c99-9b232fa2d169" Publisher="CN=Will" Version="1.0.0.0" />
+  <Identity Name="04f5ddc2-b0ce-46f6-9c99-9b232fa2d169" Publisher="CN=Will" Version="1.0.0.2" />
   <Properties>
     <DisplayName>ASPMVCSignalRTest_Client.Windows</DisplayName>
     <PublisherDisplayName>Will</PublisherDisplayName>

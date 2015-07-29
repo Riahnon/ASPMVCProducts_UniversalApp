@@ -1,0 +1,4 @@
+MainPackage=C:\Users\Will\Documents\Visual Studio 2013\Projects\ASPMVCSignalRTest_Client\ASPMVCSignalRTest_Client\ASPMVCSignalRTest_Client.Windows\bin\Release\ASPMVCSignalRTest_Client.Windows_1.0.0.2_Bundle\ASPMVCSignalRTest_Client.Windows_1.0.0.2_AnyCPU.appx
+SymbolPackage=C:\Users\Will\Desktop\ASPMVCSignalRTest_Client\Windows\ASPMVCSignalRTest_Client.Windows_1.0.0.2_Test\ASPMVCSignalRTest_Client.Windows_1.0.0.2_AnyCPU.appxsym
+ResourcePack=C:\Users\Will\Documents\Visual Studio 2013\Projects\ASPMVCSignalRTest_Client\ASPMVCSignalRTest_Client\ASPMVCSignalRTest_Client.Windows\bin\Release\ASPMVCSignalRTest_Client.Windows_1.0.0.2_Bundle\ASPMVCSignalRTest_Client.Windows_1.0.0.2_scale-140.appx
+ResourcePack=C:\Users\Will\Documents\Visual Studio 2013\Projects\ASPMVCSignalRTest_Client\ASPMVCSignalRTest_Client\ASPMVCSignalRTest_Client.Windows\bin\Release\ASPMVCSignalRTest_Client.Windows_1.0.0.2_Bundle\ASPMVCSignalRTest_Client.Windows_1.0.0.2_scale-180.appx
