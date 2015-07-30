@@ -375,13 +375,13 @@ namespace ASPMVCSignalRTest_Client
                         if (APIClient.IsBusy)
                         {
                             this.IsEnabled = false;
-                            //mCircleIsBusy.Visibility = Visibility.Visible;
+                            mCircleIsBusy.Visibility = Visibility.Visible;
                             mStackPanelIsBusy.Visibility = Visibility.Visible;
                         }
                         else
                         {
                             this.IsEnabled = true;
-                            //mCircleIsBusy.Visibility = Visibility.Collapsed;
+                            mCircleIsBusy.Visibility = Visibility.Collapsed;
                             mStackPanelIsBusy.Visibility = Visibility.Collapsed;
                         }
                         break;
